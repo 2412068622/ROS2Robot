@@ -1,0 +1,6 @@
+---
+bool success
+string message
+string[] resource_ids
+string[] owner_ids
+string[] reservation_types

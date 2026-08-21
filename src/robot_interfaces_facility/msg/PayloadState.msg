@@ -1,0 +1,9 @@
+std_msgs/Header header
+bool loaded
+string payload_id
+float64 weight_kg
+float64 capacity_kg
+string top_module_type
+string state
+string last_action
+string message

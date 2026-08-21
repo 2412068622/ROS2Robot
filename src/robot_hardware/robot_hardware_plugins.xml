@@ -1,0 +1,10 @@
+<library path="robot_chassis_hardware">
+  <class
+    name="robot_hardware/ChassisHardwareInterface"
+    type="robot_hardware::ChassisHardwareInterface"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>
+      ros2_control SystemInterface backed by the existing Serial, UDP, and Mock chassis adapter.
+    </description>
+  </class>
+</library>

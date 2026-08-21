@@ -1,0 +1,9 @@
+string lift_id
+---
+bool success
+string message
+string lift_id
+string station_id
+bool available
+string holder_id
+string status

@@ -1,0 +1,7 @@
+---
+bool success
+string message
+string active_map
+string[] names
+string[] paths
+

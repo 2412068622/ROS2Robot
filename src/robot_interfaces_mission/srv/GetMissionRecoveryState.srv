@@ -1,0 +1,10 @@
+---
+bool success
+string message
+bool enabled
+string policy
+int32 retry_limit
+int32 retry_count
+string last_failed_mission_id
+string last_failure_message
+string last_recovery_action

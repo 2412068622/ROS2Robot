@@ -1,0 +1,14 @@
+string scenario_id
+string task_id
+string order_id
+int32 priority
+bool start_if_idle
+bool preempt_current
+---
+bool success
+string message
+string scenario_id
+string task_id
+string mission_id
+string assigned_robot_id
+int32 queue_size

@@ -1,0 +1,17 @@
+business_orders:
+  - business_type: warehouse_inbound
+    label: Warehouse inbound crossdock
+    scenario_id: warehouse
+    workflow_id: door_assisted_inbound
+  - business_type: campus_mail
+    label: Campus mail full route
+    scenario_id: campus
+    workflow_id: full_mail_route
+  - business_type: hospital_round
+    label: Hospital pharmacy and lab round
+    scenario_id: hospital
+    workflow_id: pharmacy_lab_round
+  - business_type: laboratory_samples
+    label: Laboratory sample processing round
+    scenario_id: laboratory
+    workflow_id: sample_processing_round

@@ -1,0 +1,9 @@
+string zone_id
+string map_name
+string type
+string frame_id
+bool enabled
+float64 speed_limit_mps
+float64[] polygon_x
+float64[] polygon_y
+string rule

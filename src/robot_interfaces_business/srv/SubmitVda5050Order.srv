@@ -1,0 +1,14 @@
+string order_id
+string serial_number
+string pickup_node_id
+string dropoff_node_id
+int32 priority
+bool start_if_idle
+bool preempt_current
+---
+bool success
+string message
+string order_id
+string serial_number
+string mission_id
+int32 queue_size

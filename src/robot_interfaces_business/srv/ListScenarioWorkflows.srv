@@ -1,0 +1,9 @@
+string scenario_id
+---
+bool success
+string message
+string[] scenario_ids
+string[] workflow_ids
+string[] labels
+string[] task_ids_csv
+int32[] default_priorities

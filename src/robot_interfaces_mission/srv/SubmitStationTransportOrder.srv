@@ -1,0 +1,11 @@
+string order_id
+string pickup_station
+string dropoff_station
+int32 priority
+bool start_if_idle
+bool preempt_current
+---
+bool success
+string message
+string mission_id
+int32 queue_size

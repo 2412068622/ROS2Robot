@@ -1,0 +1,16 @@
+resources:
+  - id: charger_main
+    type: charger
+    station_id: dock
+    enabled: true
+    exclusive: true
+  - id: receiving_door
+    type: door
+    station_id: receiving
+    enabled: true
+    exclusive: true
+  - id: freight_elevator
+    type: elevator
+    station_id: packing
+    enabled: true
+    exclusive: true

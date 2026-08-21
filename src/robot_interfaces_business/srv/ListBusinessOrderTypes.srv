@@ -1,0 +1,7 @@
+---
+bool success
+string message
+string[] business_types
+string[] scenario_ids
+string[] workflow_ids
+string[] labels

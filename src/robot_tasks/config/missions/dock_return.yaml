@@ -1,0 +1,7 @@
+mission_id: dock_return
+frame_id: map
+loop: false
+goals:
+  - x: -1.0
+    y: -0.5
+    yaw: 3.14

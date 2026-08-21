@@ -1,0 +1,13 @@
+string dock_id
+string request_id
+int32 priority
+bool start_if_idle
+bool preempt_current
+bool simulate_contact_success
+---
+bool success
+string message
+string dock_id
+string mission_id
+string state
+int32 queue_size

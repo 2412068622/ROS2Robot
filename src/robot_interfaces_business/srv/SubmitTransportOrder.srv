@@ -1,0 +1,15 @@
+string order_id
+string frame_id
+float64 pickup_x
+float64 pickup_y
+float64 pickup_yaw
+float64 dropoff_x
+float64 dropoff_y
+float64 dropoff_yaw
+int32 priority
+bool start_if_idle
+---
+bool success
+string message
+string mission_id
+int32 queue_size

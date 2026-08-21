@@ -1,0 +1,5 @@
+string resource_id
+---
+bool success
+string message
+string owner_id

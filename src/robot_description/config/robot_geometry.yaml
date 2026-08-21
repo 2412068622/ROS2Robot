@@ -1,0 +1,59 @@
+schema_version: 1
+profile: reference_amr_v1
+
+frames:
+  base_footprint: base_footprint
+  base_link: base_link
+  base_link_height_m: 0.075
+
+base:
+  length_m: 0.55
+  width_m: 0.38
+  height_m: 0.18
+  mass_kg: 12.0
+  inertia_kg_m2:
+    ixx: 0.18
+    iyy: 0.28
+    izz: 0.36
+
+drive_wheels:
+  radius_m: 0.075
+  width_m: 0.045
+  center_separation_m: 0.43
+  joint_x_m: 0.0
+  joint_z_m: 0.0
+  mass_kg: 0.7
+  inertia_kg_m2: 0.002
+
+caster:
+  radius_m: 0.04
+  xyz_m: [-0.20, 0.0, -0.035]
+  mass_kg: 0.2
+  inertia_kg_m2: 0.0002
+
+sensors:
+  lidar:
+    frame_id: lidar_link
+    parent_frame: base_link
+    xyz_m: [0.18, 0.0, 0.27]
+    rpy_rad: [0.0, 0.0, 0.0]
+    radius_m: 0.055
+    height_m: 0.055
+    mass_kg: 0.25
+    inertia_kg_m2: 0.0004
+  imu:
+    frame_id: imu_link
+    parent_frame: base_link
+    xyz_m: [0.0, 0.0, 0.22]
+    rpy_rad: [0.0, 0.0, 0.0]
+    size_m: [0.05, 0.04, 0.02]
+    mass_kg: 0.05
+    inertia_kg_m2: 0.00005
+  camera:
+    frame_id: camera_link
+    parent_frame: base_link
+    xyz_m: [0.28, 0.0, 0.20]
+    rpy_rad: [0.0, 0.0, 0.0]
+    size_m: [0.07, 0.035, 0.035]
+    mass_kg: 0.12
+    inertia_kg_m2: 0.0001

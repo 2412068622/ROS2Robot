@@ -1,0 +1,28 @@
+{
+  "operators": {
+    "alice": "operator",
+    "bob": "supervisor",
+    "maintenance": "maintenance",
+    "system": "supervisor"
+  },
+  "roles": {
+    "operator": [
+      "GET /api/missions/events",
+      "GET /api/fleet/robots",
+      "GET /api/facilities/resources",
+      "GET /api/workflows/status",
+      "GET /api/operator/snapshot",
+      "POST /api/business_orders"
+    ],
+    "maintenance": [
+      "GET /api/missions/events",
+      "GET /api/fleet/robots",
+      "GET /api/facilities/resources",
+      "GET /api/workflows/status",
+      "GET /api/operator/snapshot"
+    ],
+    "supervisor": [
+      "*"
+    ]
+  }
+}

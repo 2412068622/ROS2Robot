@@ -1,0 +1,14 @@
+string pickup_station
+string dropoff_station
+float64 nominal_speed_mps
+float64 battery_voltage
+---
+bool success
+string message
+string mission_id
+int32 waypoint_count
+float64 distance_m
+float64 eta_sec
+float64 battery_drop_v
+float64 projected_battery_voltage
+bool battery_sufficient

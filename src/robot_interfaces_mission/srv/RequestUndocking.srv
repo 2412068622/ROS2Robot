@@ -1,0 +1,8 @@
+string dock_id
+string request_id
+bool release_charger
+---
+bool success
+string message
+string dock_id
+string state

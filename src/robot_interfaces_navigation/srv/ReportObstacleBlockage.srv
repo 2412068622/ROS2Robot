@@ -1,0 +1,8 @@
+string blockage_id
+string reason
+bool pause_active
+---
+bool success
+string message
+string state
+string blockage_id

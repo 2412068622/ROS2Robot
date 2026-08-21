@@ -1,0 +1,17 @@
+string scenario_id
+---
+bool success
+string message
+string[] scenario_ids
+string[] task_ids
+string[] labels
+string[] task_types
+string[] pickup_station_ids
+string[] dropoff_station_ids
+string[] station_sequences_csv
+string[] required_capabilities
+string[] resource_ids
+string[] resource_types
+string[] actions
+bool[] hold_after_actions
+int32[] default_priorities

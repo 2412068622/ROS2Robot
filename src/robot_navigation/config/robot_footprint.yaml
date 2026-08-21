@@ -1,0 +1,9 @@
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      footprint: "[[-0.30, -0.26], [-0.30, 0.26], [0.34, 0.26], [0.34, -0.26]]"
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      footprint: "[[-0.30, -0.26], [-0.30, 0.26], [0.34, 0.26], [0.34, -0.26]]"

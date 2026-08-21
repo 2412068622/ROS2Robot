@@ -1,0 +1,75 @@
+frame_id: map
+stations:
+  - id: receiving
+    x: -3.7
+    y: 0.0
+    yaw: 0.0
+  - id: storage_a
+    x: 1.5
+    y: 1.5
+    yaw: 1.57
+  - id: storage_b
+    x: -2.0
+    y: 2.0
+    yaw: 1.57
+  - id: packing
+    x: 2.0
+    y: -2.0
+    yaw: -1.57
+  - id: traffic_wait
+    x: -1.0
+    y: -4.2
+    yaw: 0.0
+  - id: dock
+    x: -3.9
+    y: -3.8
+    yaw: 3.14
+  - id: lift_lobby
+    x: 3.65
+    y: 2.85
+    yaw: 1.57
+  - id: floor_2_dropoff
+    x: 3.65
+    y: 3.8
+    yaw: 1.57
+edges:
+  - from: dock
+    to: receiving
+    distance_m: 3.8
+    bidirectional: true
+    enabled: true
+  - from: receiving
+    to: storage_a
+    distance_m: 5.4
+    bidirectional: true
+    enabled: true
+  - from: receiving
+    to: storage_b
+    distance_m: 2.7
+    bidirectional: true
+    enabled: true
+  - from: storage_a
+    to: packing
+    distance_m: 3.6
+    bidirectional: true
+    enabled: true
+  - from: storage_b
+    to: packing
+    distance_m: 5.7
+    bidirectional: true
+    enabled: true
+  - from: packing
+    to: dock
+    distance_m: 6.2
+    bidirectional: true
+    enabled: true
+  - from: packing
+    to: lift_lobby
+    distance_m: 5.1
+    bidirectional: true
+    enabled: true
+  - from: lift_lobby
+    to: floor_2_dropoff
+    distance_m: 1.0
+    bidirectional: true
+    enabled: true

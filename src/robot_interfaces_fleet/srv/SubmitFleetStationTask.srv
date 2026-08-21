@@ -1,0 +1,15 @@
+string task_id
+string required_capability
+string pickup_station
+string dropoff_station
+int32 priority
+bool start_if_idle
+bool preempt_current
+---
+bool success
+string message
+string task_id
+string assigned_robot_id
+string mission_id
+int32 queue_size
+float64 estimated_total_distance_m

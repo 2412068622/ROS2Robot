@@ -1,0 +1,17 @@
+string batch_id
+string[] order_ids
+string[] pickup_station_ids
+string[] dropoff_station_ids
+int32 priority
+bool start_if_idle
+bool preempt_current
+bool continue_on_error
+---
+bool success
+string message
+string[] mission_ids
+string[] rejected_order_ids
+string[] rejected_messages
+int32 accepted_count
+int32 rejected_count
+int32 queue_size

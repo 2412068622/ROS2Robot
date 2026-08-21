@@ -1,0 +1,49 @@
+zones:
+  - zone_id: dock_slow_zone
+    map_name: indoor_room
+    type: speed_limit
+    frame_id: map
+    enabled: true
+    speed_limit_mps: 0.18
+    rule: slow down around the docking station
+    polygon:
+      - [-1.45, -1.45]
+      - [-0.55, -1.45]
+      - [-0.55, -0.55]
+      - [-1.45, -0.55]
+  - zone_id: charging_keepout
+    map_name: indoor_room
+    type: keepout
+    frame_id: map
+    enabled: true
+    speed_limit_mps: 0.0
+    rule: reserve charger service bay for recovery-only access
+    polygon:
+      - [-2.30, 1.40]
+      - [-1.45, 1.40]
+      - [-1.45, 2.30]
+      - [-2.30, 2.30]
+  - zone_id: center_aisle_slow_zone
+    map_name: indoor_room
+    type: speed_limit
+    frame_id: map
+    enabled: true
+    speed_limit_mps: 0.35
+    rule: limit speed through the shared center aisle
+    polygon:
+      - [-0.30, -1.20]
+      - [0.30, -1.20]
+      - [0.30, 0.95]
+      - [-0.30, 0.95]
+  - zone_id: future_one_way_lane
+    map_name: indoor_room
+    type: preferred_lane
+    frame_id: map
+    enabled: false
+    speed_limit_mps: 0.0
+    rule: staged lane constraint for future traffic management
+    polygon:
+      - [1.10, -1.20]
+      - [1.80, -1.20]
+      - [1.80, 1.20]
+      - [1.10, 1.20]

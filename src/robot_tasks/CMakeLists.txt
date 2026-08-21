@@ -1,0 +1,207 @@
+cmake_minimum_required(VERSION 3.20)
+project(robot_tasks)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(ament_cmake REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_action REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(nav2_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(robot_interfaces REQUIRED)
+find_package(robot_interfaces_business REQUIRED)
+find_package(robot_interfaces_core REQUIRED)
+find_package(robot_interfaces_facility REQUIRED)
+find_package(robot_interfaces_fleet REQUIRED)
+find_package(robot_interfaces_mission REQUIRED)
+find_package(robot_interfaces_navigation REQUIRED)
+find_package(robot_interfaces_site REQUIRED)
+find_package(robot_navigation REQUIRED)
+find_package(behaviortree_cpp REQUIRED)
+
+add_library(robot_tasks_mission_profile
+  src/business_order_catalog.cpp
+  src/dock_catalog.cpp
+  src/docking_workflow.cpp
+  src/facility_catalog.cpp
+  src/facility_reservation.cpp
+  src/facility_workflow.cpp
+  src/fleet_catalog.cpp
+  src/fleet_runtime_state.cpp
+  src/fulfillment_workflow.cpp
+  src/mission_event_log.cpp
+  src/mission_estimator.cpp
+  src/mission_charging_workflow.cpp
+  src/mission_localization_workflow.cpp
+  src/mission_preflight.cpp
+  src/mission_profile.cpp
+  src/mission_profile_builders.cpp
+  src/mission_queue.cpp
+  src/operator_snapshot.cpp
+  src/mission_resource_cleanup.cpp
+  src/mission_result_workflow.cpp
+  src/mission_runtime_workflow.cpp
+  src/mission_safety_workflow.cpp
+  src/mission_recovery_policy.cpp
+  src/order_payload.cpp
+  src/payload_workflow.cpp
+  src/scenario_catalog.cpp
+  src/station_confirmation_workflow.cpp
+  src/station_sequence_workflow.cpp
+  src/station_transport_workflow.cpp
+  src/station_catalog.cpp
+  src/submit_order_router.cpp
+  src/traffic_reservation.cpp
+  src/workflow_control.cpp)
+target_include_directories(robot_tasks_mission_profile PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_link_libraries(robot_tasks_mission_profile robot_navigation::robot_navigation_zone_catalog)
+ament_target_dependencies(robot_tasks_mission_profile robot_navigation)
+
+add_library(robot_tasks_behavior_trees
+  src/docking_behavior_tree.cpp
+  src/facility_behavior_tree.cpp
+  src/mission_queue_behavior_tree.cpp
+  src/mission_recovery_behavior_tree.cpp
+  src/mission_resource_cleanup_behavior_tree.cpp
+  src/mission_result_behavior_tree.cpp
+  src/mission_runtime_behavior_tree.cpp
+  src/queued_mission_start_behavior_tree.cpp
+  src/station_sequence_behavior_tree.cpp
+  src/submit_order_behavior_tree.cpp)
+target_include_directories(robot_tasks_behavior_trees PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_link_libraries(
+  robot_tasks_behavior_trees
+  robot_tasks_mission_profile
+  behaviortree_cpp::behaviortree_cpp)
+
+add_executable(navigate_sequence_server_node src/navigate_sequence_server_node.cpp)
+ament_target_dependencies(navigate_sequence_server_node
+  rclcpp rclcpp_action geometry_msgs nav_msgs nav2_msgs std_msgs std_srvs robot_interfaces robot_interfaces_core)
+
+add_executable(mission_runner_node src/mission_runner_node.cpp)
+target_link_libraries(mission_runner_node robot_tasks_mission_profile robot_tasks_behavior_trees)
+ament_target_dependencies(mission_runner_node
+  ament_index_cpp rclcpp rclcpp_action geometry_msgs nav_msgs nav2_msgs std_srvs robot_interfaces robot_interfaces_business robot_interfaces_facility robot_interfaces_fleet robot_interfaces_mission robot_interfaces_navigation robot_navigation)
+
+add_executable(site_config_manager_node src/site_config_manager_node.cpp)
+target_link_libraries(site_config_manager_node robot_tasks_mission_profile)
+ament_target_dependencies(site_config_manager_node
+  rclcpp robot_interfaces robot_interfaces_site robot_navigation)
+
+install(TARGETS robot_tasks_mission_profile
+  EXPORT export_robot_tasks_mission_profile
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+install(TARGETS robot_tasks_behavior_trees
+  EXPORT export_robot_tasks_behavior_trees
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+install(TARGETS navigate_sequence_server_node mission_runner_node site_config_manager_node
+  DESTINATION lib/${PROJECT_NAME})
+
+install(DIRECTORY include/
+  DESTINATION include)
+
+install(DIRECTORY config launch
+  DESTINATION share/${PROJECT_NAME})
+
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(mission_profile_test test/mission_profile_test.cpp)
+  target_link_libraries(mission_profile_test robot_tasks_mission_profile)
+  ament_add_gtest(mission_profile_builders_test test/mission_profile_builders_test.cpp)
+  target_link_libraries(mission_profile_builders_test robot_tasks_mission_profile)
+  ament_add_gtest(station_catalog_test test/station_catalog_test.cpp)
+  target_link_libraries(station_catalog_test robot_tasks_mission_profile)
+  ament_add_gtest(station_transport_workflow_test test/station_transport_workflow_test.cpp)
+  target_link_libraries(station_transport_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(dock_catalog_test test/dock_catalog_test.cpp)
+  target_link_libraries(dock_catalog_test robot_tasks_mission_profile)
+  ament_add_gtest(mission_event_log_test test/mission_event_log_test.cpp)
+  target_link_libraries(mission_event_log_test robot_tasks_mission_profile)
+  ament_add_gtest(mission_recovery_policy_test test/mission_recovery_policy_test.cpp)
+  target_link_libraries(mission_recovery_policy_test robot_tasks_mission_profile)
+  ament_add_gtest(order_payload_test test/order_payload_test.cpp)
+  target_link_libraries(order_payload_test robot_tasks_mission_profile)
+  ament_add_gtest(operator_snapshot_test test/operator_snapshot_test.cpp)
+  target_link_libraries(operator_snapshot_test robot_tasks_mission_profile)
+  ament_add_gtest(payload_workflow_test test/payload_workflow_test.cpp)
+  target_link_libraries(payload_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(submit_order_router_test test/submit_order_router_test.cpp)
+  target_link_libraries(submit_order_router_test robot_tasks_mission_profile)
+  ament_add_gtest(business_order_catalog_test test/business_order_catalog_test.cpp)
+  target_link_libraries(business_order_catalog_test robot_tasks_mission_profile)
+  ament_add_gtest(scenario_catalog_test test/scenario_catalog_test.cpp)
+  target_link_libraries(scenario_catalog_test robot_tasks_mission_profile)
+  ament_add_gtest(workflow_control_test test/workflow_control_test.cpp)
+  target_link_libraries(workflow_control_test robot_tasks_mission_profile)
+  ament_add_gtest(mission_queue_test test/mission_queue_test.cpp)
+  target_link_libraries(mission_queue_test robot_tasks_mission_profile)
+  ament_add_gtest(mission_resource_cleanup_test test/mission_resource_cleanup_test.cpp)
+  target_link_libraries(mission_resource_cleanup_test robot_tasks_mission_profile)
+  ament_add_gtest(mission_result_workflow_test test/mission_result_workflow_test.cpp)
+  target_link_libraries(mission_result_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(mission_runtime_workflow_test test/mission_runtime_workflow_test.cpp)
+  target_link_libraries(mission_runtime_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(mission_safety_workflow_test test/mission_safety_workflow_test.cpp)
+  target_link_libraries(mission_safety_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(mission_charging_workflow_test test/mission_charging_workflow_test.cpp)
+  target_link_libraries(mission_charging_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(mission_localization_workflow_test test/mission_localization_workflow_test.cpp)
+  target_link_libraries(mission_localization_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(station_confirmation_workflow_test test/station_confirmation_workflow_test.cpp)
+  target_link_libraries(station_confirmation_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(facility_reservation_test test/facility_reservation_test.cpp)
+  target_link_libraries(facility_reservation_test robot_tasks_mission_profile)
+  ament_add_gtest(fleet_runtime_state_test test/fleet_runtime_state_test.cpp)
+  target_link_libraries(fleet_runtime_state_test robot_tasks_mission_profile)
+  ament_add_gtest(fulfillment_workflow_test test/fulfillment_workflow_test.cpp)
+  target_link_libraries(fulfillment_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(traffic_reservation_test test/traffic_reservation_test.cpp)
+  target_link_libraries(traffic_reservation_test robot_tasks_mission_profile)
+  ament_add_gtest(docking_workflow_test test/docking_workflow_test.cpp)
+  target_link_libraries(docking_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(docking_behavior_tree_test test/docking_behavior_tree_test.cpp)
+  target_link_libraries(docking_behavior_tree_test robot_tasks_behavior_trees)
+  ament_add_gtest(facility_behavior_tree_test test/facility_behavior_tree_test.cpp)
+  target_link_libraries(facility_behavior_tree_test robot_tasks_behavior_trees)
+  ament_add_gtest(mission_queue_behavior_tree_test test/mission_queue_behavior_tree_test.cpp)
+  target_link_libraries(mission_queue_behavior_tree_test robot_tasks_behavior_trees)
+  ament_add_gtest(mission_recovery_behavior_tree_test test/mission_recovery_behavior_tree_test.cpp)
+  target_link_libraries(mission_recovery_behavior_tree_test robot_tasks_behavior_trees)
+  ament_add_gtest(mission_resource_cleanup_behavior_tree_test test/mission_resource_cleanup_behavior_tree_test.cpp)
+  target_link_libraries(mission_resource_cleanup_behavior_tree_test robot_tasks_behavior_trees)
+  ament_add_gtest(mission_result_behavior_tree_test test/mission_result_behavior_tree_test.cpp)
+  target_link_libraries(mission_result_behavior_tree_test robot_tasks_behavior_trees)
+  ament_add_gtest(mission_runtime_behavior_tree_test test/mission_runtime_behavior_tree_test.cpp)
+  target_link_libraries(mission_runtime_behavior_tree_test robot_tasks_behavior_trees)
+  ament_add_gtest(queued_mission_start_behavior_tree_test test/queued_mission_start_behavior_tree_test.cpp)
+  target_link_libraries(queued_mission_start_behavior_tree_test robot_tasks_behavior_trees)
+  ament_add_gtest(station_sequence_behavior_tree_test test/station_sequence_behavior_tree_test.cpp)
+  target_link_libraries(station_sequence_behavior_tree_test robot_tasks_behavior_trees)
+  ament_add_gtest(submit_order_behavior_tree_test test/submit_order_behavior_tree_test.cpp)
+  target_link_libraries(submit_order_behavior_tree_test robot_tasks_behavior_trees)
+  ament_add_gtest(facility_workflow_test test/facility_workflow_test.cpp)
+  target_link_libraries(facility_workflow_test robot_tasks_mission_profile)
+  ament_add_gtest(station_sequence_workflow_test test/station_sequence_workflow_test.cpp)
+  target_link_libraries(station_sequence_workflow_test robot_tasks_mission_profile)
+endif()
+
+ament_export_include_directories(include)
+ament_export_targets(export_robot_tasks_mission_profile HAS_LIBRARY_TARGET)
+ament_export_targets(export_robot_tasks_behavior_trees HAS_LIBRARY_TARGET)
+ament_export_dependencies(robot_navigation)
+ament_export_dependencies(behaviortree_cpp)
+ament_package()

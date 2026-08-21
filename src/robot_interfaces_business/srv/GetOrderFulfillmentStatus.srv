@@ -1,0 +1,16 @@
+string fulfillment_id
+---
+bool success
+string message
+string fulfillment_id
+string order_type
+string sku_id
+string tote_id
+string state
+string pick_station
+string dropoff_station
+int32 requested_quantity
+int32 picked_quantity
+int32 short_quantity
+string[] mission_ids
+string[] confirmation_ids

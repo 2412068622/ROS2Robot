@@ -1,0 +1,9 @@
+string map_name
+geometry_msgs/Point point
+---
+bool success
+string message
+bool allowed
+float64 speed_limit_mps
+string[] matched_zone_ids
+string[] matched_zone_types

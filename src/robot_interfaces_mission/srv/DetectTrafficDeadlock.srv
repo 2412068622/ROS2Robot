@@ -1,0 +1,8 @@
+---
+bool success
+string message
+bool deadlocked
+string[] mission_ids
+string[] conflict_resource_ids
+string[] conflict_station_ids
+string[] descriptions

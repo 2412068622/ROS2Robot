@@ -1,0 +1,11 @@
+mission_id: demo_patrol
+frame_id: map
+loop: false
+goals:
+  - x: 0.5
+    y: 0.0
+    yaw: 0.0
+  - x: 0.5
+    y: 0.5
+    yaw: 1.57
+

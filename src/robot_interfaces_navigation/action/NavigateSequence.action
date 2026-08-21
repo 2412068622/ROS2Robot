@@ -1,0 +1,12 @@
+geometry_msgs/PoseStamped[] goals
+bool loop
+---
+bool success
+string message
+int32 succeeded_goals
+int32 failed_goals
+---
+int32 current_goal_index
+int32 total_goals
+string state
+string message

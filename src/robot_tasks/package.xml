@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>robot_tasks</name>
+  <version>0.0.0</version>
+  <description>Mission state machine, sequence action, and navigation statistics services.</description>
+  <maintainer email="ubuntu@todo.todo">ubuntu</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>ament_index_cpp</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>nav2_msgs</depend>
+  <exec_depend>nav2_waypoint_follower</exec_depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>robot_interfaces</depend>
+  <depend>robot_interfaces_business</depend>
+  <depend>robot_interfaces_core</depend>
+  <depend>robot_interfaces_facility</depend>
+  <depend>robot_interfaces_fleet</depend>
+  <depend>robot_interfaces_mission</depend>
+  <depend>robot_interfaces_navigation</depend>
+  <depend>robot_interfaces_site</depend>
+  <depend>robot_navigation</depend>
+  <depend>behaviortree_cpp</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

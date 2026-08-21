@@ -1,0 +1,10 @@
+string station_id_filter
+---
+bool success
+string message
+string[] confirmation_ids
+string[] station_ids
+string[] actions
+string[] mission_ids
+string[] operator_hints
+string[] states

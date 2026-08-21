@@ -1,0 +1,6 @@
+string reason
+---
+bool success
+string message
+string state
+bool localized

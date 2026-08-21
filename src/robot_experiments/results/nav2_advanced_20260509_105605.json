@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-05-09T10:56:05+08:00",
+  "profile": "advanced",
+  "map_file": "/home/ubuntu/robot/src/robot_navigation/maps/indoor_room.yaml",
+  "params_file": "/home/ubuntu/robot/src/robot_navigation/config/nav2_advanced.yaml",
+  "sample_seconds": 5,
+  "topics": {
+    "/scan": "available",
+    "/odom": "available",
+    "/map": "available",
+    "/nav2_cmd_vel": "available"
+  },
+  "actions": {
+    "/navigate_to_pose": "available"
+  },
+  "lifecycle": {
+    "map_server": "active",
+    "amcl": "active",
+    "controller_server": "active",
+    "planner_server": "active",
+    "behavior_server": "active",
+    "bt_navigator": "active"
+  },
+  "scope": "headless mock advanced Nav2 profile readiness experiment; no GUI, real hardware, or real-world SLAM was used"
+}

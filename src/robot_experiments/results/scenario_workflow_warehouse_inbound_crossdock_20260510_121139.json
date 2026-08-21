@@ -1,0 +1,198 @@
+{
+  "summary": {
+    "timestamp": "2026-05-10T12:11:39+08:00",
+    "scenario_id": "warehouse",
+    "workflow_id": "inbound_crossdock",
+    "order_id": "benchmark_delta",
+    "mission_ids": [
+      "station_order_fleet_benchmark_delta_step_1",
+      "station_order_fleet_benchmark_delta_step_2"
+    ],
+    "mission_count": 2,
+    "queued_count": 2,
+    "queue_size_after_submit": 2,
+    "finished_count": 2,
+    "failed_count": 0,
+    "event_count": 21,
+    "cycle_time_sec": 4.206,
+    "throughput_missions_per_min": 28.532,
+    "waiting_time_sec": 0.0,
+    "congestion_time_sec": 0.0,
+    "charging_utilization": 0.0,
+    "recovery_count": 0,
+    "human_takeover_count": 0,
+    "non_recoverable_count": 0,
+    "source_chain": "/submit_scenario_workflow -> scenario task -> fleet station task -> station order -> preflight -> mission queue -> /navigate_sequence -> /list_mission_events",
+    "scope": "headless fallback scenario workflow benchmark; no GUI, real hardware, real traffic manager, or physical map was used"
+  },
+  "events": [
+    {
+      "stamp": 1778386303.215358,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "STARTING",
+      "previous_state": "QUEUED",
+      "message": "sending mission profile to navigate sequence",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386303.216452,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "RUNNING",
+      "previous_state": "STARTING",
+      "message": "mission accepted by navigate sequence",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386303.21657,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386303.466828,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386303.717096,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386303.9671,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386304.21729,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386304.467503,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386304.7177,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386304.967849,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386305.218237,
+      "mission_id": "station_order_fleet_benchmark_delta_step_1",
+      "state": "FINISHED",
+      "previous_state": "RUNNING",
+      "message": "sequence finished",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386305.416204,
+      "mission_id": "station_order_fleet_benchmark_delta_step_2",
+      "state": "STARTING",
+      "previous_state": "FINISHED",
+      "message": "sending mission profile to navigate sequence",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386305.419287,
+      "mission_id": "station_order_fleet_benchmark_delta_step_2",
+      "state": "RUNNING",
+      "previous_state": "STARTING",
+      "message": "mission accepted by navigate sequence",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386305.669497,
+      "mission_id": "station_order_fleet_benchmark_delta_step_2",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386305.919917,
+      "mission_id": "station_order_fleet_benchmark_delta_step_2",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386306.170054,
+      "mission_id": "station_order_fleet_benchmark_delta_step_2",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386306.420187,
+      "mission_id": "station_order_fleet_benchmark_delta_step_2",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386306.670422,
+      "mission_id": "station_order_fleet_benchmark_delta_step_2",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386306.92056,
+      "mission_id": "station_order_fleet_benchmark_delta_step_2",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386307.170784,
+      "mission_id": "station_order_fleet_benchmark_delta_step_2",
+      "state": "RUNNING",
+      "previous_state": "RUNNING",
+      "message": "navigating: simulated goal progress",
+      "recoverable": true
+    },
+    {
+      "stamp": 1778386307.421185,
+      "mission_id": "station_order_fleet_benchmark_delta_step_2",
+      "state": "FINISHED",
+      "previous_state": "RUNNING",
+      "message": "sequence finished",
+      "recoverable": true
+    }
+  ]
+}

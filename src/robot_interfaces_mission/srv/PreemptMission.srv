@@ -1,0 +1,7 @@
+string mission_file
+int32 priority
+---
+bool success
+string message
+string mission_id
+int32 queue_size

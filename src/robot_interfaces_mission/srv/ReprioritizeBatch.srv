@@ -1,0 +1,7 @@
+string[] mission_ids
+int32[] priorities
+---
+bool success
+string message
+string[] updated_mission_ids
+int32 queue_size

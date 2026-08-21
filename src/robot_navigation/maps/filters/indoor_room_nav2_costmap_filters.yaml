@@ -1,0 +1,42 @@
+# Nav2 costmap filter profile generated from robot_navigation map zones.
+# Include these nodes/profile only after validating the mask servers in your launch.
+keepout_filter_mask_server:
+  ros__parameters:
+    yaml_filename: indoor_room_keepout_mask.yaml
+    topic_name: /keepout_filter_mask
+    frame_id: map
+speed_filter_mask_server:
+  ros__parameters:
+    yaml_filename: indoor_room_speed_mask.yaml
+    topic_name: /speed_filter_mask
+    frame_id: map
+keepout_costmap_filter_info_server:
+  ros__parameters:
+    filter_info_topic: /costmap_filter_info/keepout
+    type: 0
+    mask_topic: /keepout_filter_mask
+    base: 0.0
+    multiplier: 1.0
+speed_costmap_filter_info_server:
+  ros__parameters:
+    filter_info_topic: /costmap_filter_info/speed
+    type: 2
+    mask_topic: /speed_filter_mask
+    base: 0.0
+    multiplier: 0.01
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      filters: ["keepout_filter", "speed_filter"]
+      keepout_filter:
+        plugin: nav2_costmap_2d::KeepoutFilter
+        enabled: true
+        filter_info_topic: /costmap_filter_info/keepout
+      speed_filter:
+        plugin: nav2_costmap_2d::SpeedFilter
+        enabled: true
+        filter_info_topic: /costmap_filter_info/speed
+        speed_limit_topic: /speed_limit
+controller_server:
+  ros__parameters:
+    speed_limit_topic: /speed_limit

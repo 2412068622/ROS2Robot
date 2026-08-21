@@ -1,0 +1,10 @@
+chassis_driver_node:
+  ros__parameters:
+    calibration_profile: nominal_reference
+    wheel_diameter_m: 0.15
+    wheel_base_m: 0.42
+    track_width_m: 0.43
+    left_encoder_scale: 1.0
+    right_encoder_scale: 1.0
+    left_direction_sign: 1
+    right_direction_sign: 1

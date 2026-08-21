@@ -1,0 +1,6 @@
+---
+bool success
+string message
+string active_version_id
+string active_bundle_dir
+string rolled_back_from_version_id

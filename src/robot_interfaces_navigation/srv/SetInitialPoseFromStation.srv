@@ -1,0 +1,7 @@
+string station_id
+---
+bool success
+string message
+string station_id
+string state
+bool localized

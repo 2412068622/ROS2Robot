@@ -1,0 +1,12 @@
+string dock_id
+---
+bool success
+string message
+string dock_id
+string station_id
+string approach_station_id
+string charger_resource_id
+bool enabled
+bool available
+string state
+string mission_id

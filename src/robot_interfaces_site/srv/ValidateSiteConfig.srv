@@ -1,0 +1,9 @@
+string bundle_dir
+string version_id
+---
+bool success
+string message
+string version_id
+string[] checked_files
+string[] errors
+string diff_report

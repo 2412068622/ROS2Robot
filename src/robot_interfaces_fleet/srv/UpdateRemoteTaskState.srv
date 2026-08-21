@@ -1,0 +1,9 @@
+string task_id
+string state
+string message
+---
+bool success
+string message
+string task_id
+string assigned_robot_id
+string state

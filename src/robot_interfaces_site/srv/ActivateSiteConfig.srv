@@ -1,0 +1,10 @@
+string bundle_dir
+string version_id
+bool require_valid
+---
+bool success
+string message
+string active_version_id
+string active_bundle_dir
+string previous_version_id
+string diff_report

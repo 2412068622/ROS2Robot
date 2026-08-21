@@ -1,0 +1,7 @@
+float64 speed_limit_mps
+string reason
+---
+bool success
+string message
+float64 runtime_speed_limit_mps
+float64 effective_speed_limit_mps

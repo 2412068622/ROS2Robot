@@ -1,0 +1,12 @@
+string confirmation_id
+string station_id
+string action
+string mission_id
+string operator_hint
+int32 timeout_sec
+string timeout_policy
+---
+bool success
+string message
+string confirmation_id
+string state

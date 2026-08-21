@@ -1,0 +1,10 @@
+string fulfillment_id
+string operator_id
+int32 short_quantity
+string reason
+---
+bool success
+string message
+string fulfillment_id
+string state
+int32 short_quantity

@@ -1,0 +1,7 @@
+string from_station
+string to_station
+string reason
+---
+bool success
+string message
+string resource_id

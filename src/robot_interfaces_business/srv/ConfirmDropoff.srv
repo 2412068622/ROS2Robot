@@ -1,0 +1,8 @@
+string fulfillment_id
+string operator_id
+string note
+---
+bool success
+string message
+string fulfillment_id
+string state

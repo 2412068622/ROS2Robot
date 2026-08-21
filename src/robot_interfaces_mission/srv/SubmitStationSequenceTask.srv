@@ -1,0 +1,11 @@
+string order_id
+string[] station_ids
+int32 priority
+bool start_if_idle
+bool preempt_current
+---
+bool success
+string message
+string[] mission_ids
+int32 queued_count
+int32 queue_size

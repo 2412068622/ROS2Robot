@@ -1,0 +1,11 @@
+std_msgs/Header header
+bool obstacle_blocked
+bool safety_stop
+string state
+float64 runtime_speed_limit_mps
+float64 zone_speed_limit_mps
+float64 effective_speed_limit_mps
+string stop_reason
+string blockage_id
+string mission_id
+string message

@@ -1,0 +1,21 @@
+name: ros2-ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: jazzy
+      - uses: ros-tooling/action-ros-ci@v0.4
+        with:
+          package-name: robot_interfaces robot_interfaces_core robot_interfaces_navigation robot_interfaces_mission robot_interfaces_facility robot_interfaces_fleet robot_interfaces_business robot_interfaces_site robot_description robot_bringup robot_simulation robot_navigation robot_utils robot_tasks robot_path_tracking robot_hardware robot_sensors robot_teleop robot_experiments
+          target-ros2-distro: jazzy
+          # 项目所有包都在本仓库 src/ 内，无外部源码依赖。
+          # 留空 vcs-repo-file-url，避免 action 默认去 import 不存在的 package.repo。
+          vcs-repo-file-url: ""

@@ -1,0 +1,8 @@
+string order_id
+bool pause_active
+---
+bool success
+string message
+string[] affected_mission_ids
+bool active_pause_requested
+int32 queue_size

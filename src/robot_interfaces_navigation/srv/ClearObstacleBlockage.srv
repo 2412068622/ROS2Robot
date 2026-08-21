@@ -1,0 +1,7 @@
+string blockage_id
+string resolution
+bool resume_active
+---
+bool success
+string message
+string state

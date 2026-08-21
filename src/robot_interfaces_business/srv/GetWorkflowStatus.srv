@@ -1,0 +1,13 @@
+string order_id
+---
+bool success
+string message
+string order_id
+string state
+int32 total_steps
+int32 finished_steps
+int32 queued_steps
+string running_mission_id
+string[] queued_mission_ids
+string[] finished_mission_ids
+bool paused

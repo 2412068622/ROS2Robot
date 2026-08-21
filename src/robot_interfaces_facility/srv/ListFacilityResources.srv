@@ -1,0 +1,12 @@
+string resource_type
+bool include_disabled
+---
+bool success
+string message
+string[] resource_ids
+string[] resource_types
+string[] station_ids
+bool[] enabled
+bool[] available
+string[] holder_ids
+string[] status

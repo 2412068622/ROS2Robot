@@ -1,0 +1,8 @@
+---
+bool success
+string message
+string[] from_station
+string[] to_station
+float64[] distance_m
+bool[] bidirectional
+bool[] enabled

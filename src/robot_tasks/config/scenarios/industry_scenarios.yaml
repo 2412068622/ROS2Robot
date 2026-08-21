@@ -1,0 +1,276 @@
+tasks:
+  - scenario_id: warehouse
+    task_id: open_receiving_door
+    label: warehouse receiving door open
+    task_type: facility_action
+    resource_id: receiving_door
+    resource_type: door
+    action: open
+    hold_after_action: false
+    default_priority: 58
+  - scenario_id: warehouse
+    task_id: inbound_to_storage
+    label: warehouse inbound pallet transfer
+    task_type: station_transport
+    pickup_station_id: receiving
+    dropoff_station_id: storage_a
+    required_capability: station_transport
+    default_priority: 45
+  - scenario_id: manufacturing
+    task_id: line_side_supply
+    label: manufacturing line-side material supply
+    task_type: station_transport
+    pickup_station_id: storage_a
+    dropoff_station_id: packing
+    required_capability: station_transport
+    default_priority: 50
+  - scenario_id: manufacturing
+    task_id: empty_bin_return
+    label: manufacturing empty bin return
+    task_type: station_transport
+    pickup_station_id: packing
+    dropoff_station_id: storage_b
+    required_capability: station_transport
+    default_priority: 42
+  - scenario_id: hospital
+    task_id: pharmacy_to_lab
+    label: hospital medicine and sample delivery
+    task_type: station_transport
+    pickup_station_id: receiving
+    dropoff_station_id: packing
+    required_capability: station_transport
+    default_priority: 60
+  - scenario_id: hospital
+    task_id: lab_to_nurse_station
+    label: hospital sample result handoff
+    task_type: station_transport
+    pickup_station_id: packing
+    dropoff_station_id: storage_a
+    required_capability: station_transport
+    default_priority: 58
+  - scenario_id: office
+    task_id: mailroom_delivery
+    label: office mailroom delivery
+    task_type: station_transport
+    pickup_station_id: receiving
+    dropoff_station_id: storage_a
+    required_capability: station_transport
+    default_priority: 35
+  - scenario_id: office
+    task_id: pantry_restock
+    label: office pantry restock
+    task_type: station_transport
+    pickup_station_id: storage_a
+    dropoff_station_id: storage_b
+    required_capability: station_transport
+    default_priority: 34
+  - scenario_id: warehouse
+    task_id: storage_to_packing
+    label: warehouse storage to packing transfer
+    task_type: station_transport
+    pickup_station_id: storage_a
+    dropoff_station_id: packing
+    required_capability: station_transport
+    default_priority: 40
+  - scenario_id: hotel
+    task_id: back_of_house_to_service
+    label: hotel back-of-house amenity delivery
+    task_type: station_transport
+    pickup_station_id: receiving
+    dropoff_station_id: storage_b
+    required_capability: station_transport
+    default_priority: 38
+  - scenario_id: hotel
+    task_id: service_return_to_dock
+    label: hotel service cart return
+    task_type: station_transport
+    pickup_station_id: storage_b
+    dropoff_station_id: dock
+    required_capability: station_transport
+    default_priority: 36
+  - scenario_id: laboratory
+    task_id: sample_intake_to_processing
+    label: laboratory sample intake to processing
+    task_type: station_transport
+    pickup_station_id: receiving
+    dropoff_station_id: storage_a
+    required_capability: station_transport
+    default_priority: 62
+  - scenario_id: laboratory
+    task_id: processing_to_archive
+    label: laboratory processed sample archive
+    task_type: station_transport
+    pickup_station_id: storage_a
+    dropoff_station_id: packing
+    required_capability: station_transport
+    default_priority: 57
+  - scenario_id: campus
+    task_id: depot_to_mailroom
+    label: campus depot to mailroom transfer
+    task_type: station_transport
+    pickup_station_id: dock
+    dropoff_station_id: receiving
+    required_capability: station_transport
+    default_priority: 32
+  - scenario_id: campus
+    task_id: mailroom_to_department
+    label: campus mailroom to department delivery
+    task_type: station_transport
+    pickup_station_id: receiving
+    dropoff_station_id: storage_a
+    required_capability: station_transport
+    default_priority: 31
+  - scenario_id: campus
+    task_id: full_mail_route
+    label: campus full mail route
+    task_type: station_sequence
+    station_sequence_ids: dock,receiving,storage_a,packing,dock
+    required_capability: station_transport
+    default_priority: 34
+  - scenario_id: retail
+    task_id: backroom_to_shelf
+    label: retail backroom shelf replenishment
+    task_type: station_transport
+    pickup_station_id: receiving
+    dropoff_station_id: storage_a
+    required_capability: station_transport
+    default_priority: 39
+  - scenario_id: retail
+    task_id: shelf_waste_return
+    label: retail shelf waste return
+    task_type: station_transport
+    pickup_station_id: storage_a
+    dropoff_station_id: dock
+    required_capability: station_transport
+    default_priority: 30
+  - scenario_id: restaurant
+    task_id: kitchen_to_expo
+    label: restaurant kitchen to expo handoff
+    task_type: station_transport
+    pickup_station_id: packing
+    dropoff_station_id: storage_a
+    required_capability: station_transport
+    default_priority: 44
+  - scenario_id: restaurant
+    task_id: dish_return_route
+    label: restaurant dish return route
+    task_type: station_sequence
+    station_sequence_ids: storage_a,receiving,dock
+    required_capability: station_transport
+    default_priority: 37
+  - scenario_id: library
+    task_id: returns_sort_route
+    label: library returned book sorting route
+    task_type: station_sequence
+    station_sequence_ids: receiving,storage_a,packing,dock
+    required_capability: station_transport
+    default_priority: 31
+  - scenario_id: library
+    task_id: floor_patrol_return
+    label: library floor patrol return
+    task_type: station_transport
+    pickup_station_id: packing
+    dropoff_station_id: dock
+    required_capability: station_transport
+    default_priority: 28
+  - scenario_id: airport
+    task_id: security_supply_delivery
+    label: airport security supply delivery
+    task_type: station_transport
+    pickup_station_id: receiving
+    dropoff_station_id: packing
+    required_capability: station_transport
+    default_priority: 54
+  - scenario_id: airport
+    task_id: gate_restock_route
+    label: airport gate restock route
+    task_type: station_sequence
+    station_sequence_ids: packing,storage_a,storage_b,dock
+    required_capability: station_transport
+    default_priority: 49
+  - scenario_id: factory_qc
+    task_id: qc_sample_transfer
+    label: factory quality sample transfer
+    task_type: station_transport
+    pickup_station_id: storage_a
+    dropoff_station_id: packing
+    required_capability: station_transport
+    default_priority: 56
+  - scenario_id: factory_qc
+    task_id: rework_return_route
+    label: factory rework return route
+    task_type: station_sequence
+    station_sequence_ids: packing,storage_a,receiving,dock
+    required_capability: station_transport
+    default_priority: 46
+workflows:
+  - scenario_id: warehouse
+    workflow_id: inbound_crossdock
+    label: warehouse inbound cross-dock flow
+    task_ids: inbound_to_storage,storage_to_packing
+    default_priority: 55
+  - scenario_id: warehouse
+    workflow_id: door_assisted_inbound
+    label: warehouse door-assisted inbound flow
+    task_ids: open_receiving_door,inbound_to_storage
+    default_priority: 58
+  - scenario_id: manufacturing
+    workflow_id: line_replenishment_loop
+    label: manufacturing line replenishment and bin return
+    task_ids: line_side_supply,empty_bin_return
+    default_priority: 52
+  - scenario_id: hospital
+    workflow_id: pharmacy_lab_round
+    label: hospital pharmacy lab delivery round
+    task_ids: pharmacy_to_lab,lab_to_nurse_station
+    default_priority: 64
+  - scenario_id: office
+    workflow_id: workplace_services_round
+    label: office mail and pantry services round
+    task_ids: mailroom_delivery,pantry_restock
+    default_priority: 36
+  - scenario_id: hotel
+    workflow_id: guest_amenity_round
+    label: hotel guest amenity delivery and return
+    task_ids: back_of_house_to_service,service_return_to_dock
+    default_priority: 40
+  - scenario_id: laboratory
+    workflow_id: sample_processing_round
+    label: laboratory sample processing round
+    task_ids: sample_intake_to_processing,processing_to_archive
+    default_priority: 65
+  - scenario_id: campus
+    workflow_id: mail_distribution_round
+    label: campus mail distribution round
+    task_ids: depot_to_mailroom,mailroom_to_department
+    default_priority: 33
+  - scenario_id: campus
+    workflow_id: full_mail_route
+    label: campus full mail route
+    task_ids: full_mail_route
+    default_priority: 34
+  - scenario_id: retail
+    workflow_id: store_restock_and_recovery
+    label: retail store restock and recovery
+    task_ids: backroom_to_shelf,shelf_waste_return
+    default_priority: 41
+  - scenario_id: restaurant
+    workflow_id: service_and_dish_return
+    label: restaurant service and dish return
+    task_ids: kitchen_to_expo,dish_return_route
+    default_priority: 45
+  - scenario_id: library
+    workflow_id: returns_and_floor_round
+    label: library returns and floor round
+    task_ids: returns_sort_route,floor_patrol_return
+    default_priority: 32
+  - scenario_id: airport
+    workflow_id: security_and_gate_supply
+    label: airport security and gate supply
+    task_ids: security_supply_delivery,gate_restock_route
+    default_priority: 55
+  - scenario_id: factory_qc
+    workflow_id: sample_and_rework_loop
+    label: factory quality sample and rework loop
+    task_ids: qc_sample_transfer,rework_return_route
+    default_priority: 57

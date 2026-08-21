@@ -1,0 +1,17 @@
+string request_id
+string charger_id
+float64 battery_voltage
+float64 opportunity_threshold_voltage
+float64 critical_threshold_voltage
+int32 priority
+bool start_if_idle
+bool preempt_current
+bool require_idle_queue
+---
+bool success
+bool charging_queued
+string message
+string mission_id
+string charger_id
+float64 evaluated_battery_voltage
+int32 queue_size

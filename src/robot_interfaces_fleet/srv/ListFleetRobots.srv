@@ -1,0 +1,11 @@
+string capability
+bool include_disabled
+---
+bool success
+string message
+string[] robot_ids
+bool[] enabled
+string[] states
+float64[] battery_voltage
+string[] current_station_ids
+string[] capabilities

@@ -1,0 +1,6 @@
+docks:
+  - id: main_dock
+    station_id: dock
+    approach_station_id: dock
+    charger_resource_id: charger_main
+    enabled: true

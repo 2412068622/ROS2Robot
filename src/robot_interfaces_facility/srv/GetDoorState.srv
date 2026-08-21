@@ -1,0 +1,9 @@
+string door_id
+---
+bool success
+string message
+string door_id
+string station_id
+bool available
+string holder_id
+string status

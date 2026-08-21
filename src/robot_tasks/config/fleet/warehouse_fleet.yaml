@@ -1,0 +1,15 @@
+robots:
+  - id: robot_1
+    enabled: true
+    state: available
+    battery_voltage: 24.5
+    max_payload_kg: 40.0
+    current_station_id: dock
+    capabilities: transport,station_transport,charging,warehouse
+  - id: robot_2
+    enabled: true
+    state: charging
+    battery_voltage: 23.0
+    max_payload_kg: 20.0
+    current_station_id: dock
+    capabilities: transport,station_transport,hospital

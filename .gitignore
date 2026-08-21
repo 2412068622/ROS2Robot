@@ -1,0 +1,36 @@
+# --- ROS2 / colcon 构建产物 ---
+build/
+install/
+log/
+
+# --- 编译中间产物 ---
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.exe
+compile_commands.json
+CMakeUserPresets.json
+
+# 例外：3D 模型资产（Wavefront OBJ），不是编译产物，必须纳入版本库
+!src/robot_simulation/media/text_meshes/*.obj
+
+# --- 环境与缓存 ---
+.env
+.env.*
+.cache/
+*.log
+
+# --- Python 缓存 ---
+__pycache__/
+*.pyc
+*.pyo
+
+# --- 编辑器 / 本地工具配置 ---
+.vscode/*.log
+.claude/
+
+# --- 本地 AI 助手配置（保留在本地，不纳入版本库）---
+CLAUDE.md
+.vscode/

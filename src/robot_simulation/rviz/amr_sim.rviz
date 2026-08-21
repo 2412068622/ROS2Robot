@@ -1,0 +1,168 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Enabled: true
+      Name: Grid
+      Cell Size: 0.5
+      Plane: XY
+      Plane Cell Count: 24
+      Reference Frame: <Fixed Frame>
+    - Class: rviz_default_plugins/Map
+      Enabled: true
+      Name: Occupancy Map
+      Topic:
+        Value: /map
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 1
+      Alpha: 0.65
+      Color Scheme: map
+      Draw Behind: true
+    - Class: rviz_default_plugins/RobotModel
+      Enabled: true
+      Name: Robot Model
+      Alpha: 1
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_description
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 5
+      Visual Enabled: true
+      Collision Enabled: false
+      Update Interval: 0
+      TF Prefix: ""
+    - Class: rviz_default_plugins/RobotModel
+      Enabled: true
+      Name: Robot 2 Model
+      Alpha: 0.95
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_2/robot_description
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 5
+      Visual Enabled: true
+      Collision Enabled: false
+      Update Interval: 0
+      TF Prefix: ""
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: AMR Simulation Markers
+      Marker Topic:
+        Value: /amr_simulation/markers
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 5
+    - Class: rviz_default_plugins/Odometry
+      Enabled: true
+      Name: Robot Odometry
+      Topic:
+        Value: /odom
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 10
+      Shape: Arrow
+      Color: 255; 220; 0
+      Position Tolerance: 0.1
+      Angle Tolerance: 0.1
+    - Class: rviz_default_plugins/Odometry
+      Enabled: true
+      Name: Robot 2 Odometry
+      Topic:
+        Value: /robot_2/odom
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 10
+      Shape: Arrow
+      Color: 255; 90; 40
+      Position Tolerance: 0.1
+      Angle Tolerance: 0.1
+    - Class: rviz_default_plugins/Path
+      Enabled: true
+      Name: Odom Path
+      Topic:
+        Value: /odom/path
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 10
+      Color: 40; 210; 255
+      Line Style: Lines
+      Line Width: 0.045
+    - Class: rviz_default_plugins/Path
+      Enabled: true
+      Name: Navigate Sequence Path
+      Topic:
+        Value: /navigate_sequence/current_path
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 1
+      Color: 80; 255; 120
+      Line Style: Billboards
+      Line Width: 0.08
+    - Class: rviz_default_plugins/Pose
+      Enabled: true
+      Name: Navigate Sequence Goal
+      Topic:
+        Value: /navigate_sequence/current_goal
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 1
+      Shape: Arrow
+      Color: 255; 120; 30
+    - Class: rviz_default_plugins/LaserScan
+      Enabled: true
+      Name: Filtered Laser Scan
+      Topic:
+        Value: /scan
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 10
+      Style: Points
+      Size (m): 0.035
+      Color: 255; 70; 70
+    - Class: rviz_default_plugins/LaserScan
+      Enabled: true
+      Name: Robot 2 Laser Scan
+      Topic:
+        Value: /robot_2/scan
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 10
+      Style: Points
+      Size (m): 0.03
+      Color: 255; 150; 60
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Name: TF
+      Marker Scale: 0.25
+    - Class: rviz_default_plugins/PoseWithCovariance
+      Enabled: true
+      Name: Initial Pose
+      Topic:
+        Value: /initialpose
+        Durability Policy: Volatile
+        Reliability Policy: Reliable
+        History Policy: Keep Last
+        Depth: 10
+  Enabled: true
+  Global Options:
+    Fixed Frame: odom
+    Background Color: 38; 38; 38
+    Frame Rate: 30
+  Name: root

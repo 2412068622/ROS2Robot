@@ -1,0 +1,8 @@
+string payload_id
+string station_id
+---
+bool success
+string message
+string payload_id
+string state
+bool loaded

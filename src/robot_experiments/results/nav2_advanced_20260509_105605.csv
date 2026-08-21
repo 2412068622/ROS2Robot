@@ -1,0 +1,2 @@
+timestamp,profile,map_file,params_file,scan_topic,odom_topic,map_topic,nav2_cmd_vel_topic,navigate_to_pose_action,map_server,amcl,controller_server,planner_server,behavior_server,bt_navigator,sample_seconds
+2026-05-09T10:56:05+08:00,advanced,/home/ubuntu/robot/src/robot_navigation/maps/indoor_room.yaml,/home/ubuntu/robot/src/robot_navigation/config/nav2_advanced.yaml,available,available,available,available,available,active,active,active,active,active,active,5

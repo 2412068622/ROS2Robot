@@ -1,0 +1,277 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mobile_robot">
+  <xacro:arg name="use_gazebo" default="false"/>
+  <xacro:arg name="use_ros2_control_hardware" default="false"/>
+  <xacro:arg name="geometry_file" default="../config/robot_geometry.yaml"/>
+  <xacro:arg name="simulation_physics_file" default=""/>
+  <xacro:arg name="gazebo_controllers_file" default=""/>
+  <xacro:arg name="calibration_file" default=""/>
+  <xacro:arg name="ros2_control_backend" default="mock"/>
+  <xacro:arg name="ros2_control_serial_device" default="/dev/ttyUSB0"/>
+  <xacro:arg name="ros2_control_serial_baud" default="115200"/>
+  <xacro:arg name="ros2_control_udp_host" default="192.168.1.10"/>
+  <xacro:arg name="ros2_control_udp_port" default="9000"/>
+  <xacro:arg name="ros2_control_protocol" default="text"/>
+  <xacro:arg name="ros2_control_chassis_type" default="diff_drive"/>
+
+  <xacro:property name="geometry_file_path" value="$(arg geometry_file)"/>
+  <xacro:property name="geometry" value="${xacro.load_yaml(geometry_file_path)}"/>
+  <xacro:property name="frames" value="${geometry['frames']}"/>
+  <xacro:property name="base" value="${geometry['base']}"/>
+  <xacro:property name="drive_wheels" value="${geometry['drive_wheels']}"/>
+  <xacro:property name="caster" value="${geometry['caster']}"/>
+  <xacro:property name="sensors" value="${geometry['sensors']}"/>
+
+  <xacro:property name="base_footprint_frame" value="${str(frames['base_footprint'])}"/>
+  <xacro:property name="base_link_frame" value="${str(frames['base_link'])}"/>
+  <xacro:property name="base_link_height" value="${float(frames['base_link_height_m'])}"/>
+  <xacro:property name="base_length" value="${float(base['length_m'])}"/>
+  <xacro:property name="base_width" value="${float(base['width_m'])}"/>
+  <xacro:property name="base_height" value="${float(base['height_m'])}"/>
+  <xacro:property name="base_mass" value="${float(base['mass_kg'])}"/>
+  <xacro:property name="base_inertia" value="${base['inertia_kg_m2']}"/>
+  <xacro:property name="wheel_radius" value="${float(drive_wheels['radius_m'])}"/>
+  <xacro:property name="wheel_width" value="${float(drive_wheels['width_m'])}"/>
+  <xacro:property name="wheel_separation" value="${float(drive_wheels['center_separation_m'])}"/>
+  <xacro:property name="wheel_x" value="${float(drive_wheels['joint_x_m'])}"/>
+  <xacro:property name="wheel_z" value="${float(drive_wheels['joint_z_m'])}"/>
+  <xacro:property name="wheel_mass" value="${float(drive_wheels['mass_kg'])}"/>
+  <xacro:property name="wheel_inertia" value="${float(drive_wheels['inertia_kg_m2'])}"/>
+
+  <xacro:if value="${int(geometry['schema_version']) != 1}">
+    <xacro:property name="geometry_schema_error"
+      value="${xacro.fatal('unsupported robot geometry schema_version', geometry['schema_version'])}"
+      lazy_eval="false"/>
+  </xacro:if>
+  <xacro:if value="${not python.all([math.isfinite(v) and v > 0.0 for v in [base_link_height, base_length, base_width, base_height, base_mass, float(base_inertia['ixx']), float(base_inertia['iyy']), float(base_inertia['izz']), wheel_radius, wheel_width, wheel_separation, wheel_mass, wheel_inertia]])}">
+    <xacro:property name="geometry_dimension_error"
+      value="${xacro.fatal('robot geometry dimensions, mass and inertia must be finite positive values')}"
+      lazy_eval="false"/>
+  </xacro:if>
+  <xacro:if value="${base_footprint_frame != 'base_footprint' or base_link_frame != 'base_link'}">
+    <xacro:property name="geometry_frame_error"
+      value="${xacro.fatal('reference AMR requires base_footprint and base_link frame names')}"
+      lazy_eval="false"/>
+  </xacro:if>
+  <xacro:if value="${math.fabs(base_link_height - wheel_radius) > 1.0e-9 or math.fabs(wheel_z) > 1.0e-9}">
+    <xacro:property name="drive_wheel_ground_contact_error"
+      value="${xacro.fatal('reference AMR ground-contact invariant requires base_link_height_m == drive_wheels.radius_m and drive_wheels.joint_z_m == 0')}"
+      lazy_eval="false"/>
+  </xacro:if>
+
+  <material name="body_blue"><color rgba="0.22 0.30 0.42 1.0"/></material>
+  <material name="wheel_black"><color rgba="0.05 0.05 0.06 1.0"/></material>
+  <material name="sensor_green"><color rgba="0.20 0.42 0.34 1.0"/></material>
+
+  <link name="${base_footprint_frame}"/>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="${base_footprint_frame}"/>
+    <child link="${base_link_frame}"/>
+    <origin xyz="0 0 ${base_link_height}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="${base_link_frame}">
+    <visual>
+      <origin xyz="0 0 ${base_height / 2.0}" rpy="0 0 0"/>
+      <geometry><box size="${base_length} ${base_width} ${base_height}"/></geometry>
+      <material name="body_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${base_height / 2.0}" rpy="0 0 0"/>
+      <geometry><box size="${base_length} ${base_width} ${base_height}"/></geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 ${base_height / 2.0}" rpy="0 0 0"/>
+      <mass value="${base_mass}"/>
+      <inertia ixx="${base_inertia['ixx']}" ixy="0" ixz="0" iyy="${base_inertia['iyy']}" iyz="0" izz="${base_inertia['izz']}"/>
+    </inertial>
+  </link>
+
+  <xacro:macro name="drive_wheel" params="prefix y">
+    <link name="${prefix}_wheel">
+      <visual>
+        <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="wheel_black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="${wheel_mass}"/>
+        <inertia ixx="${wheel_inertia}" ixy="0" ixz="0" iyy="${wheel_inertia}" iyz="0" izz="${wheel_inertia}"/>
+      </inertial>
+    </link>
+    <joint name="${prefix}_wheel_joint" type="continuous">
+      <parent link="${base_link_frame}"/>
+      <child link="${prefix}_wheel"/>
+      <origin xyz="${wheel_x} ${y} ${wheel_z}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:drive_wheel prefix="left" y="${wheel_separation / 2.0}"/>
+  <xacro:drive_wheel prefix="right" y="${-wheel_separation / 2.0}"/>
+
+  <link name="caster_wheel">
+    <visual><geometry><sphere radius="${caster['radius_m']}"/></geometry><material name="wheel_black"/></visual>
+    <collision><geometry><sphere radius="${caster['radius_m']}"/></geometry></collision>
+    <inertial><mass value="${caster['mass_kg']}"/><inertia ixx="${caster['inertia_kg_m2']}" ixy="0" ixz="0" iyy="${caster['inertia_kg_m2']}" iyz="0" izz="${caster['inertia_kg_m2']}"/></inertial>
+  </link>
+  <joint name="caster_wheel_joint" type="fixed">
+    <parent link="${base_link_frame}"/>
+    <child link="caster_wheel"/>
+    <origin xyz="${caster['xyz_m'][0]} ${caster['xyz_m'][1]} ${caster['xyz_m'][2]}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="${sensors['lidar']['frame_id']}">
+    <visual><geometry><cylinder radius="${sensors['lidar']['radius_m']}" length="${sensors['lidar']['height_m']}"/></geometry><material name="sensor_green"/></visual>
+    <collision><geometry><cylinder radius="${sensors['lidar']['radius_m']}" length="${sensors['lidar']['height_m']}"/></geometry></collision>
+    <inertial><mass value="${sensors['lidar']['mass_kg']}"/><inertia ixx="${sensors['lidar']['inertia_kg_m2']}" ixy="0" ixz="0" iyy="${sensors['lidar']['inertia_kg_m2']}" iyz="0" izz="${sensors['lidar']['inertia_kg_m2']}"/></inertial>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="${sensors['lidar']['parent_frame']}"/>
+    <child link="${sensors['lidar']['frame_id']}"/>
+    <origin xyz="${sensors['lidar']['xyz_m'][0]} ${sensors['lidar']['xyz_m'][1]} ${sensors['lidar']['xyz_m'][2]}" rpy="${sensors['lidar']['rpy_rad'][0]} ${sensors['lidar']['rpy_rad'][1]} ${sensors['lidar']['rpy_rad'][2]}"/>
+  </joint>
+
+  <link name="${sensors['imu']['frame_id']}">
+    <visual><geometry><box size="${sensors['imu']['size_m'][0]} ${sensors['imu']['size_m'][1]} ${sensors['imu']['size_m'][2]}"/></geometry><material name="sensor_green"/></visual>
+    <collision><geometry><box size="${sensors['imu']['size_m'][0]} ${sensors['imu']['size_m'][1]} ${sensors['imu']['size_m'][2]}"/></geometry></collision>
+    <inertial><mass value="${sensors['imu']['mass_kg']}"/><inertia ixx="${sensors['imu']['inertia_kg_m2']}" ixy="0" ixz="0" iyy="${sensors['imu']['inertia_kg_m2']}" iyz="0" izz="${sensors['imu']['inertia_kg_m2']}"/></inertial>
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <parent link="${sensors['imu']['parent_frame']}"/>
+    <child link="${sensors['imu']['frame_id']}"/>
+    <origin xyz="${sensors['imu']['xyz_m'][0]} ${sensors['imu']['xyz_m'][1]} ${sensors['imu']['xyz_m'][2]}" rpy="${sensors['imu']['rpy_rad'][0]} ${sensors['imu']['rpy_rad'][1]} ${sensors['imu']['rpy_rad'][2]}"/>
+  </joint>
+
+  <link name="${sensors['camera']['frame_id']}">
+    <visual><geometry><box size="${sensors['camera']['size_m'][0]} ${sensors['camera']['size_m'][1]} ${sensors['camera']['size_m'][2]}"/></geometry><material name="sensor_green"/></visual>
+    <collision><geometry><box size="${sensors['camera']['size_m'][0]} ${sensors['camera']['size_m'][1]} ${sensors['camera']['size_m'][2]}"/></geometry></collision>
+    <inertial><mass value="${sensors['camera']['mass_kg']}"/><inertia ixx="${sensors['camera']['inertia_kg_m2']}" ixy="0" ixz="0" iyy="${sensors['camera']['inertia_kg_m2']}" iyz="0" izz="${sensors['camera']['inertia_kg_m2']}"/></inertial>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <parent link="${sensors['camera']['parent_frame']}"/>
+    <child link="${sensors['camera']['frame_id']}"/>
+    <origin xyz="${sensors['camera']['xyz_m'][0]} ${sensors['camera']['xyz_m'][1]} ${sensors['camera']['xyz_m'][2]}" rpy="${sensors['camera']['rpy_rad'][0]} ${sensors['camera']['rpy_rad'][1]} ${sensors['camera']['rpy_rad'][2]}"/>
+  </joint>
+
+  <xacro:if value="$(arg use_ros2_control_hardware)">
+    <xacro:property name="calibration_file_path" value="$(arg calibration_file)"/>
+    <xacro:if value="${calibration_file_path == ''}">
+      <xacro:property name="calibration_file_error"
+        value="${xacro.fatal('calibration_file is required when use_ros2_control_hardware is true')}"
+        lazy_eval="false"/>
+    </xacro:if>
+    <xacro:property name="calibration" value="${xacro.load_yaml(calibration_file_path)}"/>
+    <xacro:property name="calibration_params" value="${calibration['chassis_driver_node']['ros__parameters']}"/>
+    <ros2_control name="MobileBaseSystem" type="system">
+      <hardware>
+        <plugin>robot_hardware/ChassisHardwareInterface</plugin>
+        <param name="backend">$(arg ros2_control_backend)</param>
+        <param name="serial_device">$(arg ros2_control_serial_device)</param>
+        <param name="serial_baud">$(arg ros2_control_serial_baud)</param>
+        <param name="udp_host">$(arg ros2_control_udp_host)</param>
+        <param name="udp_port">$(arg ros2_control_udp_port)</param>
+        <param name="protocol">$(arg ros2_control_protocol)</param>
+        <param name="chassis_type">$(arg ros2_control_chassis_type)</param>
+        <param name="calibration_profile">${calibration_params['calibration_profile']}</param>
+        <param name="wheel_diameter_m">${calibration_params['wheel_diameter_m']}</param>
+        <param name="wheel_base_m">${calibration_params['wheel_base_m']}</param>
+        <param name="track_width_m">${calibration_params['track_width_m']}</param>
+        <param name="left_encoder_scale">${calibration_params['left_encoder_scale']}</param>
+        <param name="right_encoder_scale">${calibration_params['right_encoder_scale']}</param>
+        <param name="left_direction_sign">${calibration_params['left_direction_sign']}</param>
+        <param name="right_direction_sign">${calibration_params['right_direction_sign']}</param>
+      </hardware>
+      <joint name="left_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="right_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+    </ros2_control>
+  </xacro:if>
+
+  <xacro:if value="$(arg use_gazebo)">
+    <xacro:property name="simulation_physics_file_path" value="$(arg simulation_physics_file)"/>
+    <xacro:property name="gazebo_controllers_file_path" value="$(arg gazebo_controllers_file)"/>
+    <xacro:if value="${simulation_physics_file_path == '' or gazebo_controllers_file_path == ''}">
+      <xacro:property name="simulation_physics_file_error"
+        value="${xacro.fatal('simulation_physics_file and gazebo_controllers_file are required when use_gazebo is true')}"
+        lazy_eval="false"/>
+    </xacro:if>
+    <xacro:property name="simulation" value="${xacro.load_yaml(simulation_physics_file_path)}"/>
+    <xacro:if value="${int(simulation['schema_version']) != 1}">
+      <xacro:property name="simulation_schema_error"
+        value="${xacro.fatal('unsupported simulation physics schema_version', simulation['schema_version'])}"
+        lazy_eval="false"/>
+    </xacro:if>
+    <xacro:property name="sim_sensors" value="${simulation['sensors']}"/>
+    <xacro:property name="sim_lidar" value="${sim_sensors['lidar']}"/>
+    <xacro:property name="sim_imu" value="${sim_sensors['imu']}"/>
+    <xacro:property name="sim_camera" value="${sim_sensors['camera']}"/>
+    <xacro:if value="${not python.all([math.isfinite(float(v)) and float(v) > 0.0 for v in [sim_lidar['update_rate_hz'], sim_lidar['samples'], sim_lidar['angular_resolution'], sim_lidar['max_range_m'], sim_lidar['range_resolution_m'], sim_imu['update_rate_hz'], sim_camera['update_rate_hz'], sim_camera['horizontal_fov_rad'], sim_camera['image_width_px'], sim_camera['image_height_px']]]) or float(sim_lidar['min_range_m']) &lt; 0.0 or float(sim_lidar['max_range_m']) &lt;= float(sim_lidar['min_range_m']) or float(sim_lidar['max_angle_rad']) &lt;= float(sim_lidar['min_angle_rad'])}">
+      <xacro:property name="simulation_sensor_value_error"
+        value="${xacro.fatal('simulation sensor rates, dimensions, ranges and angles are invalid')}"
+        lazy_eval="false"/>
+    </xacro:if>
+    <ros2_control name="MobileBaseSystem" type="system">
+      <hardware>
+        <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+      </hardware>
+      <joint name="left_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="right_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+    </ros2_control>
+
+    <gazebo>
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+        <parameters>${gazebo_controllers_file_path}</parameters>
+      </plugin>
+    </gazebo>
+
+    <gazebo reference="lidar_link">
+      <sensor type="gpu_lidar" name="lidar">
+        <topic>scan</topic>
+        <update_rate>${sim_lidar['update_rate_hz']}</update_rate>
+        <ray>
+          <scan><horizontal><samples>${sim_lidar['samples']}</samples><resolution>${sim_lidar['angular_resolution']}</resolution><min_angle>${sim_lidar['min_angle_rad']}</min_angle><max_angle>${sim_lidar['max_angle_rad']}</max_angle></horizontal></scan>
+          <range><min>${sim_lidar['min_range_m']}</min><max>${sim_lidar['max_range_m']}</max><resolution>${sim_lidar['range_resolution_m']}</resolution></range>
+          <noise><type>gaussian</type><mean>0.0</mean><stddev>${sim_lidar['noise_stddev_m']}</stddev></noise>
+        </ray>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="imu_link">
+      <sensor type="imu" name="imu">
+        <topic>imu</topic>
+        <update_rate>${sim_imu['update_rate_hz']}</update_rate>
+      </sensor>
+    </gazebo>
+
+    <xacro:if value="${sim_camera['enabled']}">
+      <gazebo reference="camera_link">
+        <sensor type="camera" name="camera">
+          <topic>camera</topic>
+          <update_rate>${sim_camera['update_rate_hz']}</update_rate>
+          <camera><horizontal_fov>${sim_camera['horizontal_fov_rad']}</horizontal_fov><image><width>${sim_camera['image_width_px']}</width><height>${sim_camera['image_height_px']}</height><format>R8G8B8</format></image></camera>
+        </sensor>
+      </gazebo>
+    </xacro:if>
+  </xacro:if>
+</robot>

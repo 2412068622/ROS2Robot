@@ -1,0 +1,6 @@
+string map_name
+bool include_disabled
+---
+bool success
+string message
+robot_interfaces_navigation/MapZone[] zones

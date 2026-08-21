@@ -1,0 +1,10 @@
+string payload_id
+float64 weight_kg
+string station_id
+---
+bool success
+string message
+string payload_id
+string state
+bool loaded
+float64 weight_kg

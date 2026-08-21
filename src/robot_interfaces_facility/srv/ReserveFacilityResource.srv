@@ -1,0 +1,10 @@
+string resource_id
+string holder_id
+string mission_id
+bool release_existing_for_holder
+---
+bool success
+string message
+string resource_id
+string holder_id
+string status

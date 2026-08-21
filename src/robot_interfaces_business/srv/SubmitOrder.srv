@@ -1,0 +1,12 @@
+string order_id
+string order_type
+int32 priority
+string payload_json
+string[] tags
+---
+bool accepted
+string reject_reason
+string mission_id
+string[] mission_ids
+int32 queue_size
+string message

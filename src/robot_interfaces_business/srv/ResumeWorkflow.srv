@@ -1,0 +1,8 @@
+string order_id
+bool resume_active
+---
+bool success
+string message
+string[] affected_mission_ids
+bool active_resume_requested
+int32 queue_size

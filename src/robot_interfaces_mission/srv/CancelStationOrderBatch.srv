@@ -1,0 +1,8 @@
+string batch_id
+bool cancel_active
+---
+bool success
+string message
+string[] canceled_mission_ids
+bool active_cancel_requested
+int32 queue_size

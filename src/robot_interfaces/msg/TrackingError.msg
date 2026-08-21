@@ -1,0 +1,7 @@
+std_msgs/Header header
+float64 lateral_error
+float64 heading_error
+float64 target_speed
+float64 actual_speed
+int32 nearest_path_index
+string controller_name

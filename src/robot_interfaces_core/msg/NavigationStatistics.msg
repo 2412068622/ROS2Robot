@@ -1,0 +1,9 @@
+std_msgs/Header header
+int32 total_goals
+int32 succeeded_goals
+int32 failed_goals
+float64 success_rate
+float64 total_distance_m
+float64 last_navigation_time_s
+float64 mean_navigation_time_s
+int32 recovery_count

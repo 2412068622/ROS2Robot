@@ -1,0 +1,12 @@
+string session_id
+string lift_id
+string requester_id
+string from_station
+string to_station
+bool release_existing_for_requester
+---
+bool success
+string message
+string session_id
+string lift_id
+string status

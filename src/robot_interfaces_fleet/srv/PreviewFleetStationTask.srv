@@ -1,0 +1,12 @@
+string required_capability
+string pickup_station
+string dropoff_station
+---
+bool success
+string message
+string assigned_robot_id
+bool local_robot
+float64 approach_distance_m
+float64 task_distance_m
+float64 estimated_total_distance_m
+float64 battery_voltage

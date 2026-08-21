@@ -1,0 +1,12 @@
+bool include_disabled
+---
+bool success
+string message
+string[] dock_ids
+string[] station_ids
+string[] approach_station_ids
+string[] charger_resource_ids
+bool[] enabled
+bool[] available
+string[] states
+string[] mission_ids

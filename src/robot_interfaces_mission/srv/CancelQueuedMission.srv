@@ -1,0 +1,6 @@
+string mission_id
+bool cancel_active
+---
+bool success
+string message
+int32 queue_size

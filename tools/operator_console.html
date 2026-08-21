@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operator Console</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --text: #16202a;
+      --muted: #5b6777;
+      --border: #d9e0ea;
+      --accent: #2b5cff;
+      --accent-2: #0f766e;
+      --danger: #c2410c;
+      --warn: #8a5b00;
+      --soft: #eef3ff;
+      --shadow: 0 6px 24px rgba(22, 32, 42, 0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #f9fbff 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+    header {
+      padding: 20px 24px 14px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+    .subtitle {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    main {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 20px 24px 32px;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .toolbar input,
+    .toolbar button,
+    .toolbar select {
+      font: inherit;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      background: #fff;
+      color: var(--text);
+    }
+    .toolbar button {
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .toolbar button.secondary {
+      background: #fff;
+      color: var(--accent);
+    }
+    .toolbar button.danger {
+      background: #fff;
+      color: var(--danger);
+      border-color: #f0c2a4;
+    }
+    .statusline {
+      min-height: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 14px;
+    }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      min-width: 0;
+    }
+    .span-4 { grid-column: span 4; }
+    .span-6 { grid-column: span 6; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid #edf1f6;
+      padding: 8px 6px;
+      vertical-align: top;
+      word-break: break-word;
+    }
+    th {
+      color: var(--muted);
+      font-weight: 600;
+      width: 26%;
+    }
+    .muted { color: var(--muted); }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--accent);
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .actions {
+      display: grid;
+      gap: 10px;
+    }
+    .action-row {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+    .action-row input,
+    .action-row select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font: inherit;
+    }
+    .action-row button {
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 12px;
+      color: #223041;
+      background: #f8fafc;
+      border: 1px solid #e8edf4;
+      border-radius: 6px;
+      padding: 10px;
+      min-height: 110px;
+    }
+    @media (max-width: 1080px) {
+      .span-4, .span-6, .span-8 { grid-column: span 12; }
+      .action-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Operator Console</h1>
+    <p class="subtitle">单文件调试面板，直接读取 REST gateway 的 operator snapshot，并提供基础任务控制入口。</p>
+  </header>
+  <main>
+    <div class="toolbar">
+      <label>
+        <span class="muted">REST Base</span><br>
+        <input id="baseUrl" value="http://127.0.0.1:18080" size="28" aria-label="REST Base URL">
+      </label>
+      <button id="refreshBtn">刷新 Snapshot</button>
+      <button id="loadSampleBtn" class="secondary">载入示例业务单</button>
+      <button id="pauseBtn" class="danger">Pause</button>
+      <button id="resumeBtn" class="secondary">Resume</button>
+      <button id="cancelBtn" class="danger">Cancel</button>
+    </div>
+    <div class="statusline" id="statusLine">尚未加载数据。</div>
+
+    <div class="grid">
+      <section class="span-4">
+        <h2>Mission</h2>
+        <table>
+          <tbody id="missionTable">
+            <tr><th>state</th><td class="muted">-</td></tr>
+            <tr><th>active_goal</th><td class="muted">-</td></tr>
+            <tr><th>paused_workflows</th><td class="muted">-</td></tr>
+            <tr><th>queue_size</th><td class="muted">-</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="span-4">
+        <h2>Fleet</h2>
+        <table>
+          <tbody id="fleetTable">
+            <tr><th>robot_ids</th><td class="muted">-</td></tr>
+            <tr><th>remote_tasks</th><td class="muted">-</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section class="span-4">
+        <h2>Facilities</h2>
+        <table>
+          <tbody id="facilityTable">
+            <tr><th>resource_ids</th><td class="muted">-</td></tr>
+            <tr><th>business_types</th><td class="muted">-</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="span-6">
+        <h2>Business Order</h2>
+        <div class="actions">
+          <div class="action-row">
+            <input id="businessType" value="campus_mail" aria-label="business type">
+            <input id="orderLabel" value="demo_console" aria-label="order label">
+            <button id="submitBusinessBtn">Submit</button>
+          </div>
+          <div class="muted">提交到 `/api/business_orders`，继续走现有 REST gateway 和 scenario workflow。</div>
+        </div>
+      </section>
+
+      <section class="span-6">
+        <h2>Workflow Control</h2>
+        <div class="actions">
+          <div class="action-row">
+            <input id="workflowOrderId" value="workflow_demo" aria-label="workflow order id">
+            <select id="workflowAction" aria-label="workflow action">
+              <option value="pause">pause</option>
+              <option value="resume">resume</option>
+              <option value="cancel">cancel</option>
+            </select>
+            <button id="runWorkflowBtn">Run</button>
+          </div>
+          <div class="muted">只调用 REST gateway，不新增后端业务逻辑。</div>
+        </div>
+      </section>
+
+      <section class="span-12">
+        <h2>Recent Events</h2>
+        <pre id="eventsPane">等待加载...</pre>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const statusLine = document.getElementById('statusLine');
+    const baseUrlInput = document.getElementById('baseUrl');
+    const eventsPane = document.getElementById('eventsPane');
+    const missionTable = document.getElementById('missionTable');
+    const fleetTable = document.getElementById('fleetTable');
+    const facilityTable = document.getElementById('facilityTable');
+
+    function setStatus(message) {
+      statusLine.textContent = message;
+    }
+
+    function renderKeyValueTable(container, rows) {
+      container.innerHTML = rows.map(([key, value]) => `
+        <tr><th>${escapeHtml(key)}</th><td>${escapeHtml(value)}</td></tr>
+      `).join('');
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+    }
+
+    function joinList(value) {
+      if (Array.isArray(value)) {
+        return value.length ? value.join(', ') : '-';
+      }
+      if (value === null || value === undefined || value === '') {
+        return '-';
+      }
+      return String(value);
+    }
+
+    async function loadSnapshot() {
+      const baseUrl = baseUrlInput.value.replace(/\/$/, '');
+      setStatus('正在加载 operator snapshot...');
+      const response = await fetch(`${baseUrl}/api/operator/snapshot`);
+      if (!response.ok) {
+        throw new Error(`snapshot request failed: ${response.status}`);
+      }
+      const data = await response.json();
+      renderSnapshot(data);
+      setStatus(`已刷新 snapshot: ${new Date().toLocaleString()}`);
+    }
+
+    function renderSnapshot(data) {
+      const mission = data.mission || {};
+      renderKeyValueTable(missionTable, [
+        ['state', joinList(mission.state)],
+        ['active_mission', joinList(mission.active_mission_id || mission.active_goal_id || '-')],
+        ['paused_workflows', joinList(data.paused_workflow_order_ids || data.paused_workflows)],
+        ['queue_size', joinList((data.queue && data.queue.size) ?? mission.queue_size ?? data.queue_size ?? '-')],
+      ]);
+      renderKeyValueTable(fleetTable, [
+        ['robot_ids', joinList(data.fleet_robot_ids)],
+        ['remote_tasks', formatRemoteTasks(data.remote_tasks || data.remote_task_ids)],
+      ]);
+      renderKeyValueTable(facilityTable, [
+        ['resource_ids', joinList(data.facility_resource_ids)],
+        ['business_types', joinList(data.business_types)],
+      ]);
+      eventsPane.textContent = JSON.stringify(data.recent_mission_events || data.recent_events || data, null, 2);
+    }
+
+    function formatRemoteTasks(value) {
+      if (!Array.isArray(value) || value.length === 0) {
+        return '-';
+      }
+      if (typeof value[0] === 'string') {
+        return value.join(', ');
+      }
+      return value.map((task) => `${task.task_id || '-'}:${task.robot_id || '-'}:${task.state || '-'}`).join(', ');
+    }
+
+    async function postJson(path, payload) {
+      const baseUrl = baseUrlInput.value.replace(/\/$/, '');
+      const response = await fetch(`${baseUrl}${path}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        throw new Error(`${path} failed: ${response.status}`);
+      }
+      return response.json();
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', async () => {
+      try {
+        await loadSnapshot();
+      } catch (error) {
+        setStatus(error.message);
+      }
+    });
+
+    document.getElementById('loadSampleBtn').addEventListener('click', async () => {
+      try {
+        setStatus('正在提交示例业务工单...');
+        const result = await postJson('/api/business_orders', {
+          business_order_id: document.getElementById('orderLabel').value,
+          business_type: document.getElementById('businessType').value,
+          external_correlation_id: 'console_demo'
+        });
+        setStatus(`业务工单已提交: ${result.business_order_id || result.external_correlation_id || 'ok'}`);
+        await loadSnapshot();
+      } catch (error) {
+        setStatus(error.message);
+      }
+    });
+
+    document.getElementById('pauseBtn').addEventListener('click', async () => {
+      try {
+        const result = await postJson('/api/workflows/pause', {
+          order_id: document.getElementById('workflowOrderId').value
+        });
+        setStatus(`pause: ${escapeHtml(result.message || 'ok')}`);
+        await loadSnapshot();
+      } catch (error) {
+        setStatus(error.message);
+      }
+    });
+
+    document.getElementById('resumeBtn').addEventListener('click', async () => {
+      try {
+        const result = await postJson('/api/workflows/resume', {
+          order_id: document.getElementById('workflowOrderId').value
+        });
+        setStatus(`resume: ${escapeHtml(result.message || 'ok')}`);
+        await loadSnapshot();
+      } catch (error) {
+        setStatus(error.message);
+      }
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', async () => {
+      try {
+        const result = await postJson('/api/workflows/cancel', {
+          order_id: document.getElementById('workflowOrderId').value
+        });
+        setStatus(`cancel: ${escapeHtml(result.message || 'ok')}`);
+        await loadSnapshot();
+      } catch (error) {
+        setStatus(error.message);
+      }
+    });
+
+    document.getElementById('runWorkflowBtn').addEventListener('click', async () => {
+      const action = document.getElementById('workflowAction').value;
+      const workflowOrderId = document.getElementById('workflowOrderId').value;
+      try {
+        let result;
+        if (action === 'pause') {
+          result = await postJson('/api/workflows/pause', { order_id: workflowOrderId });
+        } else if (action === 'resume') {
+          result = await postJson('/api/workflows/resume', { order_id: workflowOrderId });
+        } else {
+          result = await postJson('/api/workflows/cancel', { order_id: workflowOrderId });
+        }
+        setStatus(`${action}: ${escapeHtml(result.message || 'ok')}`);
+        await loadSnapshot();
+      } catch (error) {
+        setStatus(error.message);
+      }
+    });
+
+    loadSnapshot().catch((error) => setStatus(error.message));
+  </script>
+</body>
+</html>

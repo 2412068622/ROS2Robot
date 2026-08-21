@@ -1,0 +1,16 @@
+string request_id
+string resource_id
+string resource_type
+string action
+int32 priority
+bool start_if_idle
+bool preempt_current
+bool hold_after_action
+---
+bool success
+string message
+string mission_id
+string resource_id
+string action
+string status
+int32 queue_size
